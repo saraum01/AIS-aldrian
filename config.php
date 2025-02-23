@@ -1,7 +1,7 @@
 <?php
 
 define('DB_SERVER', 'localhost');
-define('DB_NAME', 'pp');
+define('DB_NAME', 'aldrian');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 

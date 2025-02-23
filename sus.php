@@ -1,8 +1,7 @@
 <?php
-require_once "config.php"; // Database connection
+require_once "config.php"; 
 
-// Fetch all intruder attempts
-$sql = "SELECT id, username, attempt_time, attempt_count FROM intruders ORDER BY attempt_time DESC";
+$sql = "SELECT id, username, attempt_time, attempt_count FROM sus ORDER BY attempt_time DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $intruders = $stmt->fetchAll(PDO::FETCH_ASSOC);
