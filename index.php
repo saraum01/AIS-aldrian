@@ -12,7 +12,6 @@ $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     if (empty(trim($_POST["username"]))) {
         $username_err = "Please enter username.";
     } else {
@@ -30,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt = $pdo->prepare($sql)) {
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-
             $param_username = trim($_POST["username"]);
 
             if ($stmt->execute()) {
@@ -41,27 +39,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $hashed_password = $row["password"];
                         if (password_verify($password, $hashed_password)) {
                             session_start();
-
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
+                            resetAttempts($pdo, $username);
+
                             header("location: dashboard.php");
+                            exit;
                         } else {
                             $login_err = "Invalid username or password.";
+                            logIntruder($pdo, $username);
                         }
                     }
                 } else {
                     $login_err = "Invalid username or password.";
+                    logIntruder($pdo, $username);
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
             unset($stmt);
         }
     }
     unset($pdo);
+}
+
+function logIntruder($pdo, $username) {
+    
+    $sql = "SELECT attempt_count FROM sus WHERE username = :username";
+    if ($stmt = $pdo->prepare($sql)) {
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        unset($stmt);
+
+        if ($result) {
+        
+            $new_count = $result["attempt_count"] + 1;
+            $sql = "UPDATE sus SET attempt_count = :new_count WHERE username = :username";
+            if ($stmt = $pdo->prepare($sql)) {
+                $stmt->bindParam(":new_count", $new_count, PDO::PARAM_INT);
+                $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+                $stmt->execute();
+                unset($stmt);
+            }
+        } else {
+           
+            $sql = "INSERT INTO sus (username, attempt_count) VALUES (:username, 1)";
+            if ($stmt = $pdo->prepare($sql)) {
+                $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+                $stmt->execute();
+                unset($stmt);
+            }
+        }
+    }
+}
+
+function resetAttempts($pdo, $username) {
+    $sql = "DELETE FROM sus WHERE username = :username";
+    if ($stmt = $pdo->prepare($sql)) {
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        unset($stmt);
+    }
 }
 ?>
 

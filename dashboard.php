@@ -64,6 +64,7 @@ $dance_groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">Dashboard</a>
     <div class="navbar-nav ml-auto">
+    <a class="nav-item nav-link" href="sus.php">warning</a>
         <a class="nav-item nav-link" href="joindata.php">Join Data</a>
         <a class="nav-item nav-link" href="logout.php">Logout</a>
     </div>

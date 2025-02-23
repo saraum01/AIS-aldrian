@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 09:12 AM
+-- Generation Time: Feb 23, 2025 at 09:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,6 +77,19 @@ INSERT INTO `ratings` (`id`, `user_id`, `dance_group_id`, `rating`, `comment`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sus`
+--
+
+CREATE TABLE `sus` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `attempt_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `attempt_count` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -95,7 +108,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `first_login`) VALUES
 (1, 'joshua', '$2y$10$dYVwCpD0Ua5qd.KDI.QhZ.HYUmh.q00iLe9Hl3wWfhisFMxaTSs9O', '2024-11-13 21:24:01', 1),
 (2, 'pacx', '$2y$10$IeCihX14FDtL/p9fSKPFNuc8FhqsJOPp0AcWCoyCt2oSYx7kGunhO', '2024-11-13 22:01:26', 1),
-(3, 'tabique', '$2y$10$y3Kn8bijn.frakDEEcW1I.eePK2ZePsuekEi917mkhyicltROdmNS', '2024-11-15 15:12:14', 1);
+(3, 'tabique', '$2y$10$y3Kn8bijn.frakDEEcW1I.eePK2ZePsuekEi917mkhyicltROdmNS', '2024-11-15 15:12:14', 1),
+(4, 'opopopop', '$2y$10$l.4xBgVH2KQNWv2rR/GgQe6C4JhgA/TUvv9tYMeVL9a7OakotWbm6', '2024-11-22 16:59:39', 1);
 
 --
 -- Indexes for dumped tables
@@ -114,6 +128,13 @@ ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `dance_group_id` (`dance_group_id`);
+
+--
+-- Indexes for table `sus`
+--
+ALTER TABLE `sus`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `users`
@@ -138,10 +159,16 @@ ALTER TABLE `ratings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `sus`
+--
+ALTER TABLE `sus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
